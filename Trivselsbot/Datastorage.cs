@@ -10,12 +10,12 @@ namespace Trivselsbot
 {
     class Datastorage
     {
-        public static Dictionary<string, string> pairs = new Dictionary<string, string>();
+        private static Dictionary<string, string> pairs = new Dictionary<string, string>();
 
         static Datastorage()
         {
             //Load Data
-            ValidateStorageFile("Datastorage.json");
+            if(!ValidateStorageFile("Datastorage.json")) return;
             string json = File.ReadAllText("Datastorage.json");
             pairs = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
         }
@@ -23,16 +23,32 @@ namespace Trivselsbot
         public static void SaveData()
         {
             //Save Data
+            string json = JsonConvert.SerializeObject(pairs, Formatting.Indented);
+            File.WriteAllText("Datastorage.json", json);
         }
 
-        private static void ValidateStorageFile(string file)
+        private static bool ValidateStorageFile(string file)
         {
             if (!File.Exists(file))
             {
                 File.WriteAllText(file, "");
                 SaveData();
+                return false;
             }
 
+            return true;
+
+        }
+
+        public static void AddPairToStorage(string key, string value)
+        {
+            pairs.Add(key, value);
+            SaveData();
+        }
+
+        public static int GetPairsCount()
+        {
+            return pairs.Count;
         }
     }
 }
