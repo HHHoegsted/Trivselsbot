@@ -41,6 +41,7 @@ namespace Trivselsbot.Modules
         {
             var useraccount = UserAccounts.GetAccount(user);
             useraccount.NoOfWarnings++;
+            UserAccounts.SaveAccounts();
 
             if (useraccount.NoOfWarnings % 5 == 0)
             {
