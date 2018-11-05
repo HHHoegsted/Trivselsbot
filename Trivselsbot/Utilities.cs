@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 
 
@@ -13,12 +14,20 @@ namespace Trivselsbot
     class Utilities
     {
         private static Dictionary<string, string> alerts;
+        internal static List<string> profanity = new List<string>(){"fuck"};
 
         static Utilities()
         {
-            string json = File.ReadAllText("Systemlang/alerts.json");
+            string json = File.ReadAllText(Global.pathAlerts);
             var data = JsonConvert.DeserializeObject<dynamic>(json);
             alerts = data.ToObject<Dictionary<string, string>>();
+
+            if (File.Exists(Global.pathProfanity))
+            {
+                json = File.ReadAllText(Global.pathProfanity);
+                var profanitydata = JsonConvert.DeserializeObject<dynamic>(json);
+                profanity = profanitydata.ToObject<List<string>>();
+            }
         }
 
         public static string getAlert(string key)
@@ -73,6 +82,8 @@ namespace Trivselsbot
 
             return result;
         }
+
+
 
     }
 }

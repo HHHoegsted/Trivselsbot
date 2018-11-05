@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Discord.Commands;
 using Discord.WebSocket;
 using Trivselsbot.Core.UserAccounts;
+using Trivselsbot.Modules;
 
 namespace Trivselsbot
 {
@@ -39,6 +40,18 @@ namespace Trivselsbot
             {
                 await context.Message.DeleteAsync();
                 return;
+            }
+
+            foreach (var profanity in Utilities.profanity)
+            {
+                if (s.Content.Contains(profanity))
+                {
+                    await context.Message.DeleteAsync();
+                    await context.Channel.SendMessageAsync("Den slags ord er forbudt her!");
+                    useraccount.NoOfWarnings++;
+                    UserAccounts.SaveAccounts();
+                    return;
+                }
             }
 
             int argPos = 0;

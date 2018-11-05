@@ -1,4 +1,6 @@
 {
   "Greeting_&USER": "Hej med dig, {0}",
-  "Pairs": "System has {0} pairs" 
+  "Pairs": "System has {0} pairs",
+  "Mute": "Du får lige en pause fra chatten",
+  "Unmute": "Du kan skrive i chatten igen"
 }

@@ -37,16 +37,43 @@ namespace Trivselsbot.Modules
 
         [Command("warn")]
         [RequireUserPermission(GuildPermission.Administrator)]
-        public async Task Warn(IGuildUser user, string reason)
+        [RequireBotPermission(GuildPermission.Administrator)]
+        public async Task Warn(IGuildUser user)
         {
-            var useraccount = UserAccounts.GetAccount(user);
+            var useraccount = UserAccounts.GetAccount((SocketUser)user);
             useraccount.NoOfWarnings++;
             UserAccounts.SaveAccounts();
 
             if (useraccount.NoOfWarnings % 5 == 0)
             {
                 //TODO send email to parents
+                await Context.Channel.SendMessageAsync("Jeg har sendt en mail til dine forældre!");
             }
+        }
+
+        [Command("mute")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        [RequireBotPermission(GuildPermission.Administrator)]
+        public async Task Mute(IGuildUser user, string reason = "Der er ikke angivet nogen grund")
+        {
+            var useraccount = UserAccounts.GetAccount((SocketUser)user);
+            useraccount.IsMuted = true;
+            UserAccounts.SaveAccounts();
+            var dmChannel = await user.GetOrCreateDMChannelAsync();
+            await dmChannel.SendMessageAsync(Utilities.getAlert("Mute")); 
+            await dmChannel.SendMessageAsync(reason);
+        }
+
+        [Command("unmute")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        [RequireBotPermission(GuildPermission.Administrator)]
+        public async Task Unmute(IGuildUser user)
+        {
+            var useraccount = UserAccounts.GetAccount((SocketUser)user);
+            useraccount.IsMuted = false;
+            UserAccounts.SaveAccounts();
+            var dmChannel = await user.GetOrCreateDMChannelAsync();
+            await dmChannel.SendMessageAsync(Utilities.getAlert("Unmute"));
         }
 
         [Command("react")]
@@ -191,6 +218,14 @@ namespace Trivselsbot.Modules
                 await Context.Channel.SendMessageAsync(
                     "Du skal angive din fødselsdag som DDMM, f.eks. 2310 for 23. oktober");
             }
+        }
+
+        [Command("bandeord")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task Profanity(string word)
+        {
+             Utilities.profanity.Add(word);
+             Datastorage.saveProfanityData(Utilities.profanity);
         }
 
         [Command("help")]

@@ -50,5 +50,11 @@ namespace Trivselsbot
         {
             return pairs.Count;
         }
+
+        public static void saveProfanityData(List<string> profanityList)
+        {
+            string json = JsonConvert.SerializeObject(profanityList, Formatting.Indented);
+            File.WriteAllText(Global.pathProfanity, json);
+        }
     }
 }
