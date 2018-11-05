@@ -19,6 +19,35 @@ namespace Trivselsbot.Modules
 {
     public class Misc : ModuleBase<SocketCommandContext>
     {
+        [Command("kick")]
+        [RequireUserPermission(GuildPermission.KickMembers)]
+        [RequireBotPermission(GuildPermission.KickMembers)]
+        public async Task Kick(IGuildUser user, string reason)
+        {
+            await user.KickAsync(reason);
+        }
+
+        [Command("ban")]
+        [RequireUserPermission(GuildPermission.BanMembers)]
+        [RequireBotPermission(GuildPermission.BanMembers)]
+        public async Task Ban(IGuildUser user, string reason)
+        {
+            await user.Guild.AddBanAsync(user, 7, reason);
+        }
+
+        [Command("warn")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task Warn(IGuildUser user, string reason)
+        {
+            var useraccount = UserAccounts.GetAccount(user);
+            useraccount.NoOfWarnings++;
+
+            if (useraccount.NoOfWarnings % 5 == 0)
+            {
+                //TODO send email to parents
+            }
+        }
+
         [Command("react")]
         public async Task HandleReactionMessage()
         {

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Discord.WebSocket;
+using Trivselsbot.Core.UserAccounts;
 
 namespace Trivselsbot
 {
@@ -29,6 +30,17 @@ namespace Trivselsbot
             var msg = s as SocketUserMessage;
             if (msg == null) return;
             var context = new SocketCommandContext(_client, msg);
+
+            //mute check
+
+            var useraccount = UserAccounts.GetAccount(context.User);
+
+            if (useraccount.IsMuted)
+            {
+                await context.Message.DeleteAsync();
+                return;
+            }
+
             int argPos = 0;
             if (msg.HasStringPrefix(Config.bot.cmdPrefix, ref argPos) || msg.HasMentionPrefix(_client.CurrentUser, ref argPos))
             {

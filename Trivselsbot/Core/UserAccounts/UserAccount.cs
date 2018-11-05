@@ -18,6 +18,12 @@ namespace Trivselsbot.Core.UserAccounts
 
         public uint BirthMonth { get; set; }
 
+        public bool IsMuted { get; set; }
+
+        public uint NoOfWarnings { get; set; }
+
+        public string ParentEmail { get; set; }
+
     }
 }
 
