@@ -40,15 +40,7 @@ namespace Trivselsbot.Modules
         [RequireBotPermission(GuildPermission.Administrator)]
         public async Task Warn(IGuildUser user)
         {
-            var useraccount = UserAccounts.GetAccount((SocketUser)user);
-            useraccount.NoOfWarnings++;
-            UserAccounts.SaveAccounts();
-
-            if (useraccount.NoOfWarnings % 5 == 0)
-            {
-                //TODO send email to parents
-                await Context.Channel.SendMessageAsync("Jeg har sendt en mail til dine forældre!");
-            }
+            Global.autoWarn((SocketUser) user);
         }
 
         [Command("mute")]

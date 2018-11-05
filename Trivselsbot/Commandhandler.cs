@@ -47,9 +47,7 @@ namespace Trivselsbot
                 if (s.Content.Contains(profanity))
                 {
                     await context.Message.DeleteAsync();
-                    await context.Channel.SendMessageAsync("Den slags ord er forbudt her!");
-                    useraccount.NoOfWarnings++;
-                    UserAccounts.SaveAccounts();
+                    Global.autoWarn(context.User);
                     return;
                 }
             }
